@@ -1,0 +1,40 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2638
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 .AppleSystemUIFontMonospaced-Regular;}
+{\colortbl;\red255\green255\blue255;\red224\green232\blue240;\red12\green14\blue18;}
+{\*\expandedcolortbl;;\cssrgb\c90196\c92941\c95294;\cssrgb\c5098\c6667\c9020;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww17140\viewh13900\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 \expnd0\expndtw0\kerning0
+lsProcedure de test:\
+- initaliser le projet: ./myGit init\
+- creer tmp\
+- creer 5 files: file1.test, file2.test, etc.\
+- ajouter file1.test : ./myGit add file1.test\
+- commit sur master : ./myGit commit master -m initCommit\
+- creer une branche test: ./myGit branch testBranch\
+- on teste un 1er changement de branche : ./myGit checkout-branch testBranch\
+- on revient sur master : ./myGit checkout-branch master\
+- imprimer la liste: ./myGit refs-list\
+- on est actuellement sur master, ajouter file1.test a la zone de preparation: ./myGit add file1.test\
+- afficher la zone de preparation: ./myGit add-list\
+- vider la zone de preparation: ./myGit clear-add\
+- verifier qu'elle est bien vide: ./myGit add-list\
+- ajouter 4 fichiers a la zone de preparation: ./myGit add file1.test ... file4.test\
+- on commit sur master: ./myGit commit master -m firstCommit\
+- afficher le contenu de la branche: ./myGit branch-print master\
+- changer de branch: ./myGit checkout-branch testBranch\
+- verifier que la branche est bien vide: ./myGit branch-print\
+- verifier que la branche courante est bien celle attendue: ./myGit get-current-branch\
+- on commit 4 autres fichiers, dont 3 en commun avec le commit vers lequel pointe master pour creer un conflit: ./myGit add file2.test ... file4.test file5.test && ./myGit commit testBranch -m mergeConflict\
+- se repositionner sur master: ./myGit checkout-branch master\
+- fusionner les branches: ./myGit merge testBranch\
+- si tout s'est bien passe, file2.test, file3.test, et file4.test sont en conflit sur les deux branches. Choisir "remote" pour mettre le commit de deletion sur testBranch\
+- verifier que testBranch a bien ete effacee: ./myGit refs-list\
+- verifier que master pointe bien vers un commit contenant file1.test et file5.test: ./myGit print-branch\
+- montrer que les 5 fichiers sont bien sur master :\
+-./myGit branch-print master \
+- cd 2premiers caract\'e8res de Branches\
+- ouvrir le hashtag du tree 2 premier caract\'e8res aussi\
+- v\'e9rifier que les 5 fichiers sont dedans }
