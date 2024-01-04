@@ -1,0 +1,1294 @@
+
+/**
+  * Classe Boisson
+  *permet de créer des ingrédients pour les diffférentes recettes proposées
+*/
+
+public class Boisson extends ComposantMenu {
+
+  /** Attributs final car non modifiables une fois la boisson créée
+    * Si un client souhaite changer de boisson, il faudra en créer une nouvelle
+  */
+  private final double volume;
+  private final double nbCalories;
+
+/**
+  * Constructeur de boisson
+  * @param double volume de  la boisson
+  * @param double quantité de calories
+  * @param String nom
+  * @param int durée de préparation
+  * @param double prix
+*/
+  public Boisson(String nom, double volume, double nbCalories, int duree, double prix) {
+    super(nom, duree, prix);
+    this.volume = volume;
+    this.nbCalories = nbCalories;
+  }
+  
+ /**
+     * Accesseur du volume de la boisson
+     * @return double volume
+     */
+  public double getVolume() {
+    return volume; 
+  }
+  
+  /**
+     * Accesseur du nombre de calories
+     * @return double nbcalories
+     */
+  public double getNbCalories() {
+    return nbCalories;
+  }
+  
+  
+  /**
+     * Redéfinition de la fonction toStrong
+     * @return String texte d'affichage d'un ingrédient
+     */
+  public String toString() {
+    return "La boisson "+ this.nom + " : volume = " + volume + " cl, nombre de calories = " + nbCalories;
+  }
+  
+  /**
+     * Redéfinition de la fonction equals
+     * @param o l'objet avec lequel comparer
+     * @return boolean si égal ou non
+     */
+    
+    /*
+    public boolean equals(Object o){
+        if(o == null) return false;
+        if(o == this) return true;
+        if(!(o instanceof Boisson)) return false;
+        Boisson other = (Boisson) o;
+        if ( ! nom == o.nom) { return false;} 
+        if ( ! volume == o.volume) { return false;}
+        if ( ! nbCalories == o.nbCalories) { return false;}
+        return true;
+    }
+  */
+
+  /*
+     * Test l'égalité avec une boisson
+     * @param b la boisson
+     * @return boolean si égal ou non
+     
+    public boolean equals(Boisson b){
+        return this.nom == ib.nom && this.quantite == i.quantite && this.unite == i.unite;
+    }*/
+  
+  /**
+     * Définition de la fonction clone pour copier un ingrédient
+     * @return un nouvel ingrédient
+     
+
+
+  public double getPrix() {
+		  return prix;
+	  }
+  */
+}
+  
+
+public class BoissonChaude extends Boisson {
+	
+	
+	private String type;			
+
+	public BoissonChaude(String nom, double volume, double nbCalories, int duree, double prix){
+		super(nom, volume, nbCalories, duree, prix);
+		type = "chaude";
+	}
+	
+	public String toString(){
+		return super.toString()+"\nType"+type;
+	}
+	
+}public class BoissonFroide extends Boisson {
+	
+	
+	private String type;	
+
+	public BoissonFroide(String nom, double volume, double nbCalories, int duree, double prix){
+		super(nom, volume, nbCalories, duree, prix);
+		type = "froide";
+	}
+
+	public String toString(){
+		return super.toString()+"\nType"+type;
+	}
+}
+
+/**
+ * Inerface de personnalisation d'un composant de menu
+ */
+
+public interface ChoixIngredients {
+	
+	// mthode permettant de retirer un ingredient de la recette
+    public void retirerIngredient();
+}
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class Client{
+	
+	private String nom;
+	private boolean reservation;
+	private ArrayList <String> allergies=new ArrayList <String>();
+	private String regime;
+	
+
+
+
+	
+	
+	Scanner scan= new Scanner(System.in); 
+	Scanner sscan= new Scanner(System.in); 
+
+	public Client(){
+			//NOM
+		System.out.println("Tapez votre nom");
+		nom =scan.nextLine();
+
+		//RESERVATION
+		System.out.println("Avez-vous reserve?");
+		String h =scan.nextLine();
+		if (h.equals("non")|| h.equals("no")){
+			reservation=false;
+		}
+		else {reservation=true;}
+		
+	
+		
+		//REGIME
+		System.out.println("\nQuel est votre regime? \n1.Vegetarien\n2.Vegan\n3.Normal ");
+		boolean b= true;
+		while(b){
+		try{
+			
+				int num=scan.nextInt();
+				if(num==1) {regime ="Vegetarien";b=false;}
+				else if(num==2) {regime ="Vegan";b=false;}
+				if(num==3){regime = "Normal";b=false;}
+				if(num>3||num<1){
+					throw new InvalidInputException("Tapez un nombre entre 1 et 3");
+				}
+			}
+			catch(InvalidInputException e){
+				System.out.println(e.getMessage());
+			}
+		}
+
+		//Allergies
+		System.out.println("Avez-vous des allergies ‡ certains aliments ? \n1.Oui\n2.Non");
+		b = true;
+		while(b){
+			try{
+		
+				int m=scan.nextInt();
+				if(m==1) {
+					System.out.println("SÈlectionnez un ou plusieurs allergËnes parmis : Oeufs, Lait, Poissons, Moutarde, Graines de sésame");
+					String s="";
+					while(!(s.equals("done"))){
+			
+						s=sscan.nextLine();
+			
+						if( s.equals("done") || s.equals("") ){
+							break;
+						}
+						allergies.add(s);
+					}
+					b=false;
+				}
+				else if (m==2) {
+					System.out.println("Vous n'avez aucune allergie");
+					b=false;
+				}
+				else {
+					throw new InvalidInputException("Entre 1 pour Oui, 2 pour Non");
+				}
+			
+			}catch(InvalidInputException e){
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+		
+	
+
+	public void AllergieOuNon() {
+		
+		System.out.println("\nAvez-vous des allergies? si oui lesquelles. Sinon laissez vide. ");
+
+		 	String s="" ;
+
+		while(!(s.equals("done"))){
+
+			s=sscan.nextLine();
+
+			if( s.equals("done") || s.equals("") ){
+				break;
+			}
+
+		allergies.add(s);
+	}
+		
+	}
+	
+
+	public String toString() {
+		return nom+ ": allergies "+allergies+" regime: "+regime;
+	}
+	
+
+/////////////////////////////////////////////METHODE GET////////////////////////////////////////////////////////////////
+	public boolean getReservation(){
+		return reservation;
+	}
+
+	public ArrayList <String> getAllergies(){
+		return allergies;
+
+		}
+	public String getNom() {
+		return nom;
+		
+	}
+	public String getRegime() {
+		return regime;
+		
+	}
+
+
+	
+/////////////////////////////////////////////METHODE gET////////////////////////////////////////////////////////////////
+	public void setReservation(boolean bb){
+		 reservation=bb;
+	}
+
+
+	public void setNom(String n) {
+		nom=n;
+		
+		}
+	public void setRegime(String s) {
+		 regime=s;
+		
+	}
+
+}
+	
+
+	 
+	
+	
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
+public class Commande{
+	DecimalFormat df = new DecimalFormat("#.##");
+		
+	private ComposantMenu entreechoix;
+	private ComposantMenu platschoix;
+	private ComposantMenu dessertchoix;
+	private ComposantMenu boissonchoix;
+	private double facture;
+	private Client client;
+
+	Scanner scan= new Scanner(System.in); 
+
+	public Commande(Client c,ComposantMenu entree, ComposantMenu plat, ComposantMenu dessert, ComposantMenu boisson ){
+		client=c;
+		entreechoix=entree;
+		platschoix=plat;
+		dessertchoix=dessert;
+		boissonchoix=boisson;
+
+
+	}
+
+	public Commande(Client c){
+		client =c;
+
+	}
+
+	public void retirerIngredient() {
+					
+			ArrayList<String> allergies = this.client.getAllergies();
+			
+			// Si les allergËnes sont prÈsents dans l'entree, on les supprime.
+			
+			for(String allergie : allergies ) {
+				for(String ingredient : this.entreechoix.getIngred()) {
+					if(ingredient == allergie) {
+						this.entreechoix.getIngred().remove(ingredient);
+					}
+				}
+			}
+			
+			// Si les allergËnes sont prÈsents dans le plat, on les supprime.
+			
+			for(String allergie : allergies ) {
+				
+				for(String ingredient : this.platschoix.getIngred()) {
+					
+					if(ingredient == allergie) {
+						this.platschoix.getIngred().remove(ingredient);
+					}
+				}
+			}
+					
+			// Si les allergËnes sont prÈsents dans le dessert, on les supprime.
+			
+			for(String allergie : allergies ) {
+				
+				for(String ingredient : this.dessertchoix.getIngred()) {
+					
+					if(ingredient == allergie) {
+						this.dessertchoix.getIngred().remove(ingredient);
+					}
+				}
+			}
+			
+			System.out.println("Les allergènes ont ete retires de votre commande\n votre commande est maintenant composee de :\n"+ entreechoix.toString() +"\n" + platschoix.toString()+ "\n" +dessertchoix.toString());
+	}
+
+
+
+
+
+
+	public ComposantMenu getEntreechoix() {
+		return entreechoix;
+	}
+
+
+	public void setEntreechoix(ComposantMenu entreechoix) {
+		this.entreechoix = entreechoix;
+	}
+	
+	public void setBoissonchoix(ComposantMenu boissonchoix) {
+		this.boissonchoix = boissonchoix;
+	}
+
+
+	public ComposantMenu getPlatschoix() {
+		return platschoix;
+	}
+
+
+	public void setPlatschoix(ComposantMenu platschoix) {
+		this.platschoix = platschoix;
+	}
+
+
+	public ComposantMenu getDessertchoix() {
+		return dessertchoix;
+	}
+
+
+	public void setDessertchoix(ComposantMenu dessertchoix) {
+		this.dessertchoix = dessertchoix;
+	}
+
+
+	public String  afficheChoix() {
+		return "\nVotre commande :\n\nEntree: " + entreechoix.getNom()+ "\nPlat: " +platschoix.getNom()+ "\nDessert: " + dessertchoix.getNom()+ "\nBoisson: "+boissonchoix.getNom();
+	}
+
+	public void facture(){
+		facture+=entreechoix.getPrix()+platschoix.getPrix()+dessertchoix.getPrix()+boissonchoix.getPrix();
+		System.out.println("Votre montant a payer est : "+facture+"€"+"\n");
+		System.out.println("Comment voulez-vous regler?\n1.Carte\n2.Espece");
+		int x= scan.nextInt();
+		if (x==1){
+			System.out.println("Merci beaucoup et à bientôt!");
+		}
+		else{
+			double apayer=facture;
+			double tot=0;
+			while(tot != apayer){
+				if (tot<apayer){
+				System.out.println("il vous manque : "+ df.format((facture -tot))+"€");
+				tot+=scan.nextDouble();
+				}
+
+				if(tot>apayer){
+				System.out.println("votre change :"+ df.format(tot - apayer)+"€");
+				break;
+			}
+				if(tot==apayer){
+					break;
+				}
+				
+			}
+			System.out.println("Merci beaucoup et à bientôt!");
+		}
+	}
+
+	public void compoNutri(){
+		
+		System.out.println("Voulez-vous savoir les ingredients composant vos plats ? \nEntrez 1 ou 2 \n1.Oui\n2.Non");
+		boolean b = true;
+		while(b){
+			
+			try{
+				int n=scan.nextInt();
+				if(n==1){
+					System.out.println("\n"+entreechoix.toString() +"\n\n"+platschoix.toString()+"\n\n"+dessertchoix.toString()+"\n");
+					b = false;
+				}
+				else if (n==2) {
+					b = false;
+				}
+				else {
+					throw new InvalidInputException("Entre 1 pour Oui, 2 pour Non");
+				}
+			}
+			catch(InvalidInputException e){
+				System.out.println(e.getMessage());
+			}
+		}
+		if(! (client.getAllergies().isEmpty())) {
+			System.out.println("Les alliments vous causant des allergies seront retirÈs");
+			System.out.println("\n");
+			this.retirerIngredient();
+		}
+	}
+
+
+	public Commande clone(){
+		return new Commande( client, entreechoix,platschoix,dessertchoix,boissonchoix);
+	}
+
+	}
+
+
+
+import java.util.ArrayList;
+/**
+ * Classe représentant une recette
+ */
+public abstract class ComposantMenu {
+ 
+  protected int duree; //la durée de préparation
+  protected ArrayList<String> ingredients;
+  protected String nom;
+  protected double prix;
+
+  
+  public ComposantMenu(String nom,int duree, double prix ) {
+	    this.duree = duree;
+	    this.nom=nom;
+      this.prix = prix;
+	  }
+
+
+  public String toString() {
+	    String s = "la recette "+nom +" : est composée de \n";
+	    for (String i : ingredients) {
+	     s += i.toString()+"\n";
+	    }
+	   return s+"prend "+duree+" minutes a faire et ";
+	  }
+  public String getNom() {
+	  return nom;
+  }
+  
+  public void retirerIngredient(String ingredient) {
+		this.ingredients.remove(ingredient);
+		
+		
+		}
+  
+
+  
+  public ArrayList<String> getIngred() {
+	  return ingredients;
+  }
+
+  public double getPrix(){
+  	return prix;
+  }
+  public String  afficherIngred(){
+  	String c="";
+  	for(String i : ingredients){
+  		c+= i+" ";
+
+  	}
+  	return c;
+
+  }
+}
+
+
+	import java.util.ArrayList;
+public class Dessert extends ComposantMenu {
+	
+	private double numCalories;
+	private String compositionNut;
+	
+
+	public Dessert (String nom, int duree, ArrayList<String> ingredient,double nbCalories, String c, double prix) {
+		
+		super(nom, duree, prix);
+		numCalories = nbCalories;
+		compositionNut=c;
+  		ingredients=ingredient;
+  
+
+		
+	}
+	
+		
+		public String toString() {
+		    String s = "Le dessert "+ nom+ "  est composé de : \n";
+		    for (String i : ingredients) {
+		     s += i.toString()+" ";
+		    }
+		   return s+" temps de preparation: "+ duree +" minutes, contient "+ numCalories + " calories"+"\nMacronutriments: "+compositionNut+"\nprix :"+prix+"€";
+		  }
+
+		  public double getPrix() {
+		  return prix;
+	  }
+		
+	}
+
+
+
+import java.util.ArrayList;
+
+public class Entree extends ComposantMenu{
+	
+	private double numCalories;
+	private String compositionNut ;
+ 
+	
+	public Entree (String nom, int duree, ArrayList<String> ingredients,double numC, String c, double prix) {
+		
+		super(nom, duree, prix);
+		numCalories=numC;
+		compositionNut=c;
+    this.ingredients=ingredients;
+		
+	}
+	
+	public void enleverAllergies(ArrayList<String> ingred,Client c) {
+		ArrayList <String> z=c.getAllergies();
+		
+		for (int i=0;i<ingred.size();i++) {
+			if (z.contains(ingred.get(i))) {
+				ingred.remove(i);
+			}
+		}
+		this.ingredients=ingred;
+		///System.out.println(ingredients);
+	}
+	
+	public String toString() {
+		    String s = "L'entree: "+nom +"  est composée de : \n";
+		    for (String i : ingredients) {
+		     s += i.toString()+" ";
+		    }
+		   return s+" temps de preparation: "+ duree +" minutes, contient "+ numCalories + " calories"+"\nMacronutriments: "+compositionNut+"\nprix :"+prix+"€";
+		  }
+
+	public String getCompositionNut() {
+		return compositionNut;
+	}
+
+	public void setCompositionNut(String compositionNut) {
+		this.compositionNut = compositionNut;
+	}
+	public String getNom() {
+		  return nom;
+	  }
+	  public double getPrix() {
+		  return prix;
+	  }
+}
+public class InvalidInputException extends Exception {
+
+	public InvalidInputException(String message) {
+		super("Erreur : "+message);
+	}
+	
+}
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Menu {
+	static Scanner scan= new Scanner(System.in); 
+	
+	private static  ArrayList <ComposantMenu> menuNormal= new ArrayList<ComposantMenu>();
+	private static ArrayList <ComposantMenu> menuVegan= new ArrayList <ComposantMenu>();
+	private static ArrayList <ComposantMenu> menuVeget= new ArrayList <ComposantMenu>();
+	private static ArrayList <ComposantMenu> menuDessert= new ArrayList <ComposantMenu>();
+	private static ArrayList <ComposantMenu> menuBoisson= new ArrayList <ComposantMenu>();
+	
+	private static final Menu MENU =new Menu();
+	
+	private Menu() {
+		menuNormal.add( new Entree("Soupe de lentille",10,new ArrayList<String> (Arrays.asList("Huile d'olive", "Carottes", "Oignons", "Lentilles ")),24.5,"0,9 g proeteine, 3,9 g glucides, 0,3 g lipides",5.00));
+		menuNormal.add( new Entree("Tartare de boeuf ",10,new ArrayList<String> (Arrays.asList("Moutarde","Persil","Oignons","Huile d'Olive","Oeufs","steack")),400,"44g proetéines,3g glucides,22 g lipides",13.90));
+		menuNormal.add( new Entree("Salade caesar au poulet ",10,new ArrayList<String> (Arrays.asList("Salade ","Citron","Piment","Sel","Escalope de poulet","Oeuf","Echalote","Parmesan","Biscottes")),45,"1 g proteines,2 g glucides, 3.5 g lipides",4.50));
+		
+		menuNormal.add( new Plats("Entrecôte grillée accompagné de purée de pomme de terre",25,new ArrayList<String> (Arrays.asList("1 Entrecôte", "Huile d'olive", "Sel", "Purée de PDT", "Beurre", "Lait")),600,"70 g proeteine, 3,9 g glucides, 0,3 g lipides",17.90));
+		menuNormal.add( new Plats("Spaghetti bolognese",20,new ArrayList<String> (Arrays.asList("spaghetti","Huile d’olive","Oignons","Boeuf haché","Sel","concentré de tomate","Parmesan")),137,"5.91 g proetéines, 16.9 g glucides, 4.83 g lipides",13.90));
+		menuNormal.add( new Plats("Tartiflette",15,new ArrayList<String> (Arrays.asList("Reblochon","Pomme de Terre","Oignon","Lardons fumés","Vin blanc", "Noix de beurre","Poivre du moulin")),144,"4.7 g proteines, 12.5 g glucides, 8.2 g lipides",9.90));
+		
+		menuVeget.add( new Entree("Quiche ricotta épinards",10,new ArrayList<String> (Arrays.asList("Pâte feuilletée","épinards","Ricotta","Parmesan")),242,"1 g proteines,2 g glucides, 3.5 g lipides",6.0));
+		menuVeget.add( new Entree("Soupe Ribollita",15,new ArrayList<String> (Arrays.asList("Haricots blancs", "Choux noir", "épinards", "pain sec", "Oignon")),238,"12 g proteines, 32 g glucides, 5 g lipides",6.90));
+		menuVeget.add( new Entree("Salade thai au quinoa",5,new ArrayList<String> (Arrays.asList("Aubergine","Courgette","huile d’olive","quinoa","tomates cerises","pignons de pin")),335,"10 g proteines, 44 g glucides, 25 g lipides",8.90));
+		
+		menuVeget.add( new Plats("Couscous aux légumes",25,new ArrayList<String> (Arrays.asList("Couscous","Tomates","Haricots verts","Carotte","Courgette","pois-chiches")),320,"2 g proteines, 5.5 g glucides, 0.5 g lipides",8.45));
+		menuVeget.add( new Plats("Lasagne au légumes",15,new ArrayList<String> (Arrays.asList("Lasagne", "Courgettes", "Champignons", "épinards", "Carotte", "Oignon")),254,"12 g proteines, 24 g glucides, 11 g lipides",8.90));
+		menuVeget.add( new Plats("Risotto de petit épeautre aux topinambours",25,new ArrayList<String> (Arrays.asList("petit épeautre mondé","parmesan râpé","huile d’olive","bouillon de légumes","topinambour","noisettes grillées")),435,"14 g proteines, 71 g glucides, 18 g lipides",10.00));
+									
+		menuVegan.add( new Entree("Hummus",5,new ArrayList<String> (Arrays.asList("Pois chiche","Tahin","Citron","Huile d'olive","Cumin")),120,"4 g proteines, 5 g glucides, 5 g lipides",6.00));
+		menuVegan.add( new Entree("tofu sautés à la sauce soja",15,new ArrayList<String> (Arrays.asList("Tofu ferme nature", "Piment de Cayenne", "graines de sésame", "Huile de sésame", "Sauce soja")),220,"8.19 g proteines, 1.69 g glucides, 2.87 g lipides",7.00));
+		menuVegan.add( new Entree("Soupe au maïs,tomates et couregttes",5,new ArrayList<String> (Arrays.asList("courgettes coupées","bouillon de légumes","huile d’olive","tomates entières","maïs")),24.5,"0,9 g proeteine, 3,9 g glucides, 0,3 g lipides",5.00));
+		
+		menuVegan.add( new Plats("Risotto de chou fleur aux champignons",25,new ArrayList<String> (Arrays.asList("chou fleur","noix muscade","crème végétale Risotto","champignons","parmiggiano reggiano","Huile d'olive")),335,"14 g proteines, 71 g glucides, 18 g lipides",10.90));
+		menuVegan.add( new Plats("Spaghetti d’Estate",20,new ArrayList<String> (Arrays.asList("spaghetti", "Courgettes", "tomates", "herbes de Provence", "piment doux")),367,"5.8 g proteines, 30.86 g glucides, 0.93 g lipides",13.50));
+		menuVegan.add( new Plats("Burger a base soja",20,new ArrayList<String> (Arrays.asList("soja", "pain", "tomates", "salade", "pomme de terre")),400,"5.8 g proteines, 30.86 g glucides, 0.93 g lipides",13.50));
+		
+		
+		menuDessert.add( new Dessert("Tiramisu",5,new ArrayList<String> (Arrays.asList("biscuits", "Oeufs", "mascarpone", "café noir")),350,"5.8 g proteines, 30.86 g glucides, 0.93 g lipides",5.00));
+		menuDessert.add( new Dessert("Fondant au chocolat",5,new ArrayList<String> (Arrays.asList("Chocolat noir ", "Oeufs", "beurre", "farine de blé")),400,"5.8 g proteines, 30.86 g glucides, 0.93 g lipides",5.00));												   
+		menuDessert.add( new Dessert("Salade de fruits",5,new ArrayList<String> (Arrays.asList("raisins", "bananes", "pommes", "kiwi", "mangue")),158,"5.8 g proteines, 30.86 g glucides, 0.93 g lipides",5.00));												   
+		menuDessert.add( new Dessert("Crêpes au chocolat",5,new ArrayList<String> (Arrays.asList("Farine", "Oeufs", "Lait", "beurre fondu", "chocolat")),300,"0.8 g proteines, 30.86 g glucides, 0.93 g lipides",5.00));
+
+		menuBoisson.add(new BoissonFroide("Coca",330,150,1,2));
+	    menuBoisson.add(new BoissonFroide("Sprite",330,150,1,2)); 
+	    menuBoisson.add(new BoissonFroide("Fanta",330,150,1,2));
+	    menuBoisson.add(new BoissonFroide("Jus d'Orange",350,150,4,2));
+	    menuBoisson.add(new BoissonFroide("Jus de Pomme",350,150,4,2));
+	    menuBoisson.add(new BoissonFroide("Jus de Carotte",350,150,4,2));
+	    menuBoisson.add(new BoissonChaude("Café",150,50,2,2));
+	    menuBoisson.add(new BoissonChaude("Thé",250,26,1,2));
+
+	}
+	
+	
+	
+	///affiche tout le menu en fonction du regime du client
+	public static void afficherMenu(Client c) {
+		if (c.getRegime().equals("Vegetarien")) {
+			System.out.println("	menu ");
+			afficher(menuVeget);
+		}
+		if(c.getRegime().equals("Vegan")) {
+			afficher(menuVegan);
+		}
+		else {
+			System.out.println("voici le menu");
+			afficher(menuVeget);
+			afficher(menuVegan);
+			afficher(menuNormal);
+		}
+	}
+	
+
+	
+	
+	///mehthode qui affiche les noms des plats
+	public static void afficher(ArrayList <ComposantMenu> r) {
+		for(int i=0;i<r.size();i++) {
+		
+			System.out.println( (i+1)+": "+ (r.get(i)).getNom() +"  :  "+r.get(i).getPrix()+ "€");
+		}
+		
+	}
+	///methode qui affiche le menu en fonction du regime et fait le choix des plats dessert et entree
+	
+public static void choixMenu(Commande c,Client n) {
+		
+		
+		
+		System.out.println("Choisissez votre entree");
+		
+		
+				if (n.getRegime().equals("Vegetarien")) {
+					afficherEntree(menuVeget);
+					
+					boolean b=true;
+					while(b){
+						try{
+							int d=scan.nextInt();
+							if(d>3|| d<1){
+								throw new InvalidInputException ("Tapez un nombre entre 1 et 3");
+							}
+							else{
+								c.setEntreechoix(menuVeget.get(d-1));
+
+								b=false;
+							}
+						}
+						catch(InvalidInputException e){
+							System.out.println(e.getMessage());
+
+						}
+					
+				}
+					
+				}
+					
+					
+				
+				else if (n.getRegime().equals("Vegan")) {
+					afficherEntree(menuVegan);
+					boolean b=true;
+					while(b){
+						try{
+							int d=scan.nextInt();
+							if(d>3|| d<1){
+								throw new InvalidInputException ("Tapez un nombre entre 1 et 3");
+							}
+							else{
+								c.setEntreechoix(menuVegan.get(d-1));
+
+								b=false;
+							}
+						}
+						catch(InvalidInputException e){
+							System.out.println(e.getMessage());
+
+						}
+					
+				}
+				}
+				else if (n.getRegime().equals("Normal")) {
+					afficherE();
+					boolean b=true;
+					while(b){
+						
+						try{
+						int d=scan.nextInt();
+						if(d>0 && d<4) {
+						c.setEntreechoix(menuNormal.get(d-1));
+						b=false;
+						}
+						if(d>3 && d<7) {
+							c.setEntreechoix(menuVegan.get(d-4));
+							b=false;
+							}
+						if(d>6 && d<10) {
+							c.setEntreechoix(menuVeget.get(d-7));
+							b=false;
+						}
+						if(d>9 || d<1){
+							throw new InvalidInputException("Tapez un nombre entre 1 et 9");
+						}
+						
+					}
+					catch(InvalidInputException e){
+							System.out.println(e.getMessage());
+						}
+
+					}
+					
+				}
+//////////////////////////////CHOIX DE PLATS////////////////////////////////////////				
+				System.out.println("Choisissez votre plats");
+				
+				if (n.getRegime().equals("Vegetarien")) {
+					afficherPlats(menuVeget);
+					boolean b=true;
+					while(b){
+						try{
+							int d=scan.nextInt();
+							if(d>3|| d<1){
+								throw new InvalidInputException ("Tapez un nombre entre 1 et 3");
+							}
+							else{
+								c.setPlatschoix(menuVeget.get(d+2));
+								b=false;
+							}
+						}
+						catch(InvalidInputException e){
+							System.out.println(e.getMessage());
+
+						}
+					
+				}
+					
+				}
+					
+					
+				
+				else if (n.getRegime().equals("Vegan")) {
+					afficherPlats(menuVegan);
+					
+					
+					boolean b=true;
+					while(b){
+						try{
+							int d=scan.nextInt();
+							if(d>3|| d<1){
+								throw new InvalidInputException ("Tapez un nombre entre 1 et 3");
+							}
+							else{
+								c.setPlatschoix(menuVegan.get(d+2));
+								b=false;
+							}
+						}
+						catch(InvalidInputException e){
+							System.out.println(e.getMessage());
+
+						}
+					
+				}
+
+				}
+				else if (n.getRegime().equals("Normal")) {
+						afficherP();
+					boolean b=true;
+					while(b){
+						
+						try{
+							int d=scan.nextInt();
+						if(d>0 && d<4) {
+						c.setPlatschoix(menuNormal.get(d+2));
+						b=false;
+						}
+						if(d>3 && d<7) {
+							c.setPlatschoix(menuVegan.get(d-2));
+							b=false;
+							}
+						if(d>6 && d<10) {
+							c.setPlatschoix(menuVeget.get(d-4));
+							b=false;
+						}
+						if(d>9 || d<1){
+							throw new InvalidInputException("Tapez un nombre entre 1 et 9");
+						}
+						
+					}
+					catch(InvalidInputException e){
+							System.out.println(e.getMessage());
+						}
+
+					}
+					
+				}
+//////////////////////////////CHOIX DE DESSERT////////////////////////////////////////		
+				
+				
+	System.out.println("Choisissez votre dessert");
+	afficher(menuDessert);
+	
+	
+	boolean b=true;
+	while(b){
+		try{
+			int d=scan.nextInt();
+			if(d>4|| d<1){
+				throw new InvalidInputException ("Tapez un nombre entre 1 et 4");
+					}
+				else{
+					c.setDessertchoix(menuDessert.get(d-1));
+					b=false;
+				}
+			}
+			catch(InvalidInputException e){
+			System.out.println(e.getMessage());
+
+						}
+					
+				}
+	
+	///////////////////////////////CHOIX DE BOISSON////////////////////////////////////////
+  		System.out.println("Choisissez votre boisson");
+  		afficher(menuBoisson);
+  		b=true;
+  		while(b){
+		try{
+			int d=scan.nextInt();
+			if(d>8|| d<1){
+				throw new InvalidInputException ("Tapez un nombre entre 1 et 8");
+					}
+			else{
+					c.setBoissonchoix(menuBoisson.get(d-1));
+					b=false;
+				}
+			}
+			catch(InvalidInputException e){
+					System.out.println(e.getMessage());
+
+						}
+					
+				}
+
+}
+				
+	
+		
+		
+	
+	
+	public static void afficherEntree(ArrayList <ComposantMenu> r) {
+		for(int i=0;i<3;i++) {
+		
+			
+			System.out.println( (i+1)+": "+ (r.get(i)).getNom()+ "  :  "+r.get(i).getPrix() +"€");
+		}
+	}
+		
+	public static void afficherPlats(ArrayList <ComposantMenu> r) {
+		int c=1;
+			for(int i=3;i<6;i++) {
+				
+				System.out.println( (c)+": "+ (r.get(i)).getNom() + "  :  "+r.get(i).getPrix()+"€");
+				c++;
+			}
+	}
+	
+	////////////affichage des entree 
+	
+	public static void afficherE() {
+		int c=1;
+		for (int i=0;i<3;i++) {
+			System.out.println( c+": "+ (menuNormal.get(i)).getNom() +"  : "+ menuNormal.get(i).getPrix()+"€");
+			c++;
+		}
+		for (int i=0;i<3;i++) {
+			System.out.println( c+": "+ (menuVegan.get(i)).getNom() +"  : "+ menuNormal.get(i).getPrix()+"€");
+			c++;
+		}
+		for (int i=0;i<3;i++) {
+			System.out.println( c+": "+ (menuVeget.get(i)).getNom()+"  : "+ menuNormal.get(i).getPrix() +"€");
+			c++;
+		}
+		
+		
+		
+	}
+	
+	public static void afficherP() {
+		int c=1;
+		for (int i=3;i<6;i++) {
+			System.out.println( c+": "+ (menuNormal.get(i)).getNom() +"  : "+ menuNormal.get(i).getPrix() +"€");
+			c++;
+		}
+		for (int i=3;i<6;i++) {
+			System.out.println( c+": "+ (menuVegan.get(i)).getNom() +"  : "+ menuNormal.get(i).getPrix()+"€");
+			c++;
+		}
+		for (int i=3;i<6;i++) {
+			System.out.println( c+": "+ (menuVeget.get(i)).getNom() +"  : "+ menuNormal.get(i).getPrix()+"€");
+			c++;
+		}
+
+	}
+	
+///////get instance menu////
+	
+	public static Menu getMenu() {
+		return MENU;
+	}
+	
+	
+}
+	
+	
+	
+
+	
+	
+
+
+import java.util.ArrayList;
+
+public class Plats extends ComposantMenu{
+
+	private double numCalories;
+	private String compositionNut;
+	
+	
+	public Plats(String nom, int duree, ArrayList<String> ingredient,double numC,String c, double prix) {
+		super(nom, duree, prix);
+    
+		numCalories=numC;
+		compositionNut=c;
+    	ingredients=ingredient;
+
+	}
+	
+	
+public String toString() {
+		 String s = "Le plat "+nom +"  est composé de : \n";
+		    for (String i : ingredients) {
+		     s += i.toString()+" ";
+		    }
+		   return s+" temps de preparation: "+ duree +" minutes, contient "+ numCalories + " calories"+"\nMacronutriments: "+compositionNut+"\nprix :"+prix+"€";
+		  }
+
+public double getPrix() {
+		  return prix;
+	  }
+	
+}
+import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Reservation {
+	 private static int taille=6;
+	 
+	 private static String[][] tab = new String [taille][taille];
+	 private String heure;
+	 public static int numRes=0;
+	 private String nom;
+	 private int numTable;
+	 SimpleDateFormat ss=new SimpleDateFormat("HH:mm");
+	 
+	static Scanner s= new Scanner(System.in); 
+	
+	 
+	 public Reservation(String n, String t, int table) {
+		 nom=n;
+		 heure=t;
+		 numTable=table;
+		 numRes++;
+		 
+		 
+	 }
+	 public Reservation(String n, int table) {
+		 nom=n;
+		 
+		 numTable=table;
+		 Date heure=new Date();
+		 this.heure=ss.format(heure);
+		 numRes++;
+		 
+		 
+	 }
+
+	 
+	  public static void inittab() {
+		 
+	 for(int i=0;i<taille;i++) {
+		 for (int j=0;j<taille;j++) {
+			 tab[i][j]= "[   ]";
+			 
+		 }
+	 }
+	 }
+	  
+	 public static String afficherPlace() {
+		 
+		 String chaine="      *------------------------------*\n\n";
+		
+		 for (int i=0;i<taille;i++) {
+			 
+			 for (int j=0;j<taille;j++) {
+				 
+				 if (j==taille-1) {
+					chaine+=  " " +tab[i][j]+" |";
+					
+					continue;
+					
+				 }
+				 if (j==0) {
+						chaine+= "| "+tab[i][j];
+						
+						continue;
+						
+					 }
+				 
+				 chaine+= " "+tab[i][j]+" ";
+				
+				 
+			 }
+			 chaine+="\n";
+			
+		 }
+		 chaine+="\n      *------------------------------*";
+		return chaine;
+		 
+		 
+	 }
+	 ////METHODE QUI CREER UNE NOUVELLE RESERVATION
+	 public static Reservation ajouterNouvRes(Client c) {
+
+	boolean b=true;
+	int z = 0;
+	while(b) {
+
+		System.out.println("\nChoissisez la table ");
+		int n=s.nextInt();
+
+		if(n > 36) {
+			
+			System.out.println("Choisissez une table entre 1 et 36");
+			continue;
+		}
+
+		z=n;
+		int ret=n % taille;
+		int r=0;//le nombre de fois que taille divise n
+
+		while(z != ret) {
+			z=z-taille;
+			r++;
+			}
+
+		if (n%taille==0) {
+			if (tab[r][5].equals("[ X ]")) {
+				System.out.println("table deja prise");
+				continue;
+			}
+			else {tab[r-1][5]="[ X ]";b=false;}
+		}
+		else {
+			if(tab[r][ret-1].equals("[ X ]")){
+					System.out.println("table deja prise");
+					continue ;
+		}
+			tab[r][ret-1]="[ X ]";
+			b=false;
+			System.out.println("\nVous-avez choisi la tale numero : "+ z+"!\n");
+
+		}
+	 }
+	return new Reservation(c.getNom(),z);
+
+	}
+////METHODE QUI RAJOUTE LA RESERVATION DU CLIENT S'IL A RESERVE
+	 
+	 public static Reservation ajouterRes(Client c) {
+		 System.out.println("A quelle heure est votre reservation?");
+		 String d = s.nextLine();
+		 
+		 System.out.println("Et quelle table?");
+		 int t=s.nextInt();
+		 
+		 resTable(t);
+		 
+		return new Reservation(c.getNom(),d,t);
+		 
+		 
+	 }
+		
+	 
+//remplir le tableau aleatoirement 
+	 
+	 public static void remplirtab() {
+		
+			 
+		 for (int i=0;i<15;i++) {
+			 
+			 int j=(int)(Math.random()*(5));
+			 int u=(int)(Math.random()*(5));
+			
+			 tab[j][u]="[ X ]";
+		 }
+	 
+	 }
+	 
+	 ////METHODE QUI RESERVE UNE TABLE 
+	 public static void resTable(int n) {
+		 int r=0;
+		 int ret=n%taille;
+		 
+		 while(n!=ret) {
+			 n=n-taille;
+			 r++;
+		 }
+		 if (n%taille==0) { tab[r-1][5]="[ X ]";}
+		 else {
+		 tab[r][ret-1]="[ X ]";
+	 }
+	 }
+	 
+	 
+////////////////////////////////// METHODES GET//////////////////////////////////////////////////
+	 
+	 public String  getNom() {
+		 return nom;
+		 
+	 }
+	 public String  getHeure() {
+		 return heure;
+		 
+	 }
+	 public double  getNumTable() {
+		 return numTable;
+		 
+	 }
+	 
+	 ///////////////methode de choisir automatiquent une methode de reservation///////////////
+	 
+	 public static Reservation reserver(Client c) {
+			
+			if(c.getReservation()==true) {
+				return  ajouterRes(c);
+				
+			}else {
+				System.out.println(Reservation.afficherPlace());
+				return ajouterNouvRes(c);
+			}
+			
+	 }
+	 
+	 
+	 public String toString() {
+		 return  "Reservation au nom : "+nom +" avec numero de reference : "+numRes+ " a "+heure +" h "+ "numero de table :  "+numTable;
+	 }
+	 
+}
+
+
+
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Test{
+	public static void main (String [] args){
+		Scanner ss= new Scanner(System.in); 
+
+		Client n = new Client();
+	
+		Reservation.inittab();
+		Reservation.remplirtab();
+		
+		
+		Reservation r1 = Reservation.reserver(n);
+		
+		System.out.println(Reservation.afficherPlace()+"\n");
+		
+		//System.out.println(n.toString()+"\n");
+
+		System.out.println(r1.toString()+"\n");
+		
+		Menu r= Menu.getMenu();
+		Commande c1=new Commande(n);
+		
+		
+		Menu.choixMenu(c1,n);
+	
+		System.out.println(c1.afficheChoix()+"\n");
+
+		//n.AllergieOuNon();
+
+		c1.compoNutri();
+
+		//c1.enleverAllergene(n);
+		c1.facture();
+		//System.out.println("\n"+n.getEntreechoix().toString());
+		
+	
+		
+	
+}
+	}
